@@ -1,6 +1,6 @@
 
-#' @title Conditional UI
-#' @description
+#' Conditional UI
+#'
 #' This function takes some UI element and a compiletime-evaluated expression and returns the UI element ONLY if the condition is true
 #'
 #' WARNING: Do NOT use this function for runtime-dynamic UI elements. Only works with compiletime variables.

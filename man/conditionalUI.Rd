@@ -16,7 +16,8 @@ if expression==TRUE: taglist wrapping passed UI element. If expression == FALSE,
 }
 \description{
 This function takes some UI element and a compiletime-evaluated expression and returns the UI element ONLY if the condition is true
-
+}
+\details{
 WARNING: Do NOT use this function for runtime-dynamic UI elements. Only works with compiletime variables.
 For dynamic UI see ?shiny::conditionalPanel()
 }
