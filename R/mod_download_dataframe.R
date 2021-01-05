@@ -5,8 +5,8 @@
 #'
 #' @param id Internal parameters for {shiny}
 #' @inheritParams shinyWidgets::downloadBttn
-#'
-#' @export
+#' @param tooltip_text text to appear when cursor hovers over download button (string)
+#' @export tooltip_pos Where the tooltip should appear relative to its target (top, bottom, left, or right). Defaults to "right"
 #'
 mod_download_dataframeUI <- function(id, label = "Download", tooltip_text ="", tooltip_pos = "right", style = "unite", color = "default", size="sm"){
   ns <- NS(id)
@@ -33,7 +33,7 @@ mod_download_dataframeServer <- function(id, data_to_write, filename_full= "tabl
   moduleServer(id,
     function(input, output, session){
       output$out_download_bttn <- downloadHandler(filename = filename_full, content = function(file) {
-        write.table(x=data_to_write, file = file, append = F, quote = F, sep = "\t", row.names = rownames, col.names = colnames)
+        write.table(x=data_to_write, file = file, append = FALSE, quote = TRUE, sep = "\t", row.names = rownames, col.names = colnames)
         })
   }
   )
