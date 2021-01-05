@@ -6,5 +6,5 @@
 #' @noRd
 app_server <- function( input, output, session ) {
   # Your application server logic
-  mod_download_dataframeServer("mod_download_dataframe_test", data_to_write = mtcars, filename_full = "mtcars.tsv", rownames = FALSE, colnames = TRUE)
+  mod_download_dataframe_server("mod_download_dataframe_test", data_to_write = mtcars, filename_full = "mtcars.tsv", rownames = FALSE, colnames = TRUE)
 }
