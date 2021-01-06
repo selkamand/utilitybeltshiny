@@ -15,7 +15,7 @@ mod_download_dataframe_server(
 \arguments{
 \item{id}{Internal parameters for {shiny}}
 
-\item{data_to_write}{dataframe or datatable (dataframe / data.table)}
+\item{data_to_write}{dataframe or datatable (dataframe / data.table) (can be a reactive or non-reactive object)}
 
 \item{filename_full}{Name to save file under. Include any extensions (string)}
 

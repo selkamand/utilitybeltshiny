@@ -22,7 +22,7 @@ mod_download_dataframe_ui <- function(id, label = "Download", tooltip_text ="", 
 #' Downloads a dataframe or datatable.
 #'
 #' @param id Internal parameters for {shiny}
-#' @param data_to_write dataframe or datatable (dataframe / data.table)
+#' @param data_to_write dataframe or datatable (dataframe / data.table) (can be a reactive or non-reactive object)
 #' @param filename_full Name to save file under. Include any extensions (string)
 #' @param rownames Save row names? (boolean)
 #' @param colnames Save column names? (boolean)
@@ -32,16 +32,21 @@ mod_download_dataframe_ui <- function(id, label = "Download", tooltip_text ="", 
 mod_download_dataframe_server <- function(id, data_to_write, filename_full, rownames=FALSE, colnames=TRUE){
   moduleServer(id,
     function(input, output, session){
-      utilitybelt::assert_that(is.data.frame(data_to_write) || data.table::is.data.table(data_to_write), msg = utilitybelt::fmterror("mod_download_dataframe_server: data_to_write must be a dataframe or a datatable, not a ", class(data_to_write)))
+
       utilitybelt::assert_that(assertthat::is.flag(rownames))
       utilitybelt::assert_that(assertthat::is.flag(colnames))
+      utilitybelt::assert_non_empty_string(filename_full)
+
 
       output$out_download_bttn <- downloadHandler(filename = filename_full, content = function(file) {
-        utils::write.table(x=data_to_write, file = file, append = FALSE, quote = TRUE, sep = "\t", row.names = rownames, col.names = colnames)
+        utilitybelt::assert_that(is.data.frame(data_to_write()) || data.table::is.data.table(data_to_write()), msg = utilitybelt::fmterror("mod_download_dataframe_server: data_to_write() must be a dataframe or a datatable, not a ", class(data_to_write())))
+        utils::write.table(x=data_to_write(), file = file, append = FALSE, quote = TRUE, sep = "\t", row.names = rownames, col.names = colnames)
         })
   }
   )
 }
+
+
 
 # Copy in UI
 
