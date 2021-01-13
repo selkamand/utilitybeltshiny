@@ -1,0 +1,1237 @@
+#' Change style of any HTML element
+#'
+#' @description
+#' This function facilitates changing the style during runtime.
+#' Run in Server code.
+#' DO NOT FORGET to add the line: 'shinyjs::useShinyjs()' to the UI function.
+#'
+#' \strong{Warning:}
+#' If the javascript code goes wrong (property doesn't exist / value is invalid), it fails silently without any effect on the app.
+#' To see the error message, open up the javascript console.
+#' To debug,consider running the same JS code directly in the console.
+#' If it works as expected, then the cause is usually you've forgotten to add shinyjs::useShinyjs() to the UI function (only need to do this once).
+#' If you hit problems, mess about on the console untill you find the appropriate combination of property and value.
+#'
+#' @param element_id the ID of the html object whose style you want tochange
+#' @param property some property of the style attribute to change / create (string)
+#' @param value value the property should take (string)
+#' @param verbose print the javascript code run to make the relevant change? (flag)
+#' @return Nothing
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' library(shiny)
+#' library(shinyjs)
+#'
+#' ui <- fluidPage(
+#'   useShinyjs(),
+#'   actionButton(inputId = "in_my_button", label = "my_button")
+#' )
+#' server <- function(input, output, session) {
+#'   style_modify("my_button", property="backgroundColor", value = "red")
+#' }
+#' shinyApp(ui, server)
+#' }
+#'
+#' @details
+#' To test what sort of properties you can work with and the values they takes, find a webpage, hit f12, grab an element ID and type:
+#'
+#' \code{document.getElementById("<id>").style.<property> = <value> }
+#'
+#'
+#' \strong{ Examples of Properties}
+#'
+#' MozAnimation
+#'
+#' MozAnimationDelay
+#'
+#' MozAnimationDirection
+#'
+#' MozAnimationDuration
+#'
+#' MozAnimationFillMode
+#'
+#' MozAnimationIterationCount
+#'
+#' MozAnimationName
+#'
+#' MozAnimationPlayState
+#'
+#' MozAnimationTimingFunction
+#'
+#' MozAppearance
+#'
+#' MozBackfaceVisibility
+#'
+#' MozBorderEnd
+#'
+#' MozBorderEndColor
+#'
+#' MozBorderEndStyle
+#'
+#' MozBorderEndWidth
+#'
+#' MozBorderImage
+#'
+#' MozBorderStart
+#'
+#' MozBorderStartColor
+#'
+#' MozBorderStartStyle
+#'
+#' MozBorderStartWidth
+#'
+#' MozBoxAlign
+#'
+#' MozBoxDirection
+#'
+#' MozBoxFlex
+#'
+#' MozBoxOrdinalGroup
+#'
+#' MozBoxOrient
+#'
+#' MozBoxPack
+#'
+#' MozBoxSizing
+#'
+#' MozFloatEdge
+#'
+#' MozFontFeatureSettings
+#'
+#' MozFontLanguageOverride
+#'
+#' MozForceBrokenImageIcon
+#'
+#' MozHyphens
+#'
+#' MozImageRegion
+#'
+#' MozMarginEnd
+#'
+#' MozMarginStart
+#'
+#' MozOrient
+#'
+#' MozOsxFontSmoothing
+#'
+#' MozOutlineRadius
+#'
+#' MozOutlineRadiusBottomleft
+#'
+#' MozOutlineRadiusBottomright
+#'
+#' MozOutlineRadiusTopleft
+#'
+#' MozOutlineRadiusTopright
+#'
+#' MozPaddingEnd
+#'
+#' MozPaddingStart
+#'
+#' MozPerspective
+#'
+#' MozPerspectiveOrigin
+#'
+#' MozTabSize
+#'
+#' MozTextSizeAdjust
+#'
+#' MozTransform
+#'
+#' MozTransformOrigin
+#'
+#' MozTransformStyle
+#'
+#' MozTransition
+#'
+#' MozTransitionDelay
+#'
+#' MozTransitionDuration
+#'
+#' MozTransitionProperty
+#'
+#' MozTransitionTimingFunction
+#'
+#' MozUserFocus
+#'
+#' MozUserInput
+#'
+#' MozUserModify
+#'
+#' MozUserSelect
+#'
+#' MozWindowDragging
+#'
+#' WebkitAlignContent
+#'
+#' WebkitAlignItems
+#'
+#' WebkitAlignSelf
+#'
+#' WebkitAnimation
+#'
+#' WebkitAnimationDelay
+#'
+#' WebkitAnimationDirection
+#'
+#' WebkitAnimationDuration
+#'
+#' WebkitAnimationFillMode
+#'
+#' WebkitAnimationIterationCount
+#'
+#' WebkitAnimationName
+#'
+#' WebkitAnimationPlayState
+#'
+#' WebkitAnimationTimingFunction
+#'
+#' WebkitAppearance
+#'
+#' WebkitBackfaceVisibility
+#'
+#' WebkitBackgroundClip
+#'
+#' WebkitBackgroundOrigin
+#'
+#' WebkitBackgroundSize
+#'
+#' WebkitBorderBottomLeftRadius
+#'
+#' WebkitBorderBottomRightRadius
+#'
+#' WebkitBorderImage
+#'
+#' WebkitBorderRadius
+#'
+#' WebkitBorderTopLeftRadius
+#'
+#' WebkitBorderTopRightRadius
+#'
+#' WebkitBoxAlign
+#'
+#' WebkitBoxDirection
+#'
+#' WebkitBoxFlex
+#'
+#' WebkitBoxOrdinalGroup
+#'
+#' WebkitBoxOrient
+#'
+#' WebkitBoxPack
+#'
+#' WebkitBoxShadow
+#'
+#' WebkitBoxSizing
+#'
+#' WebkitFilter
+#'
+#' WebkitFlex
+#'
+#' WebkitFlexBasis
+#'
+#' WebkitFlexDirection
+#'
+#' WebkitFlexFlow
+#'
+#' WebkitFlexGrow
+#'
+#' WebkitFlexShrink
+#'
+#' WebkitFlexWrap
+#'
+#' WebkitJustifyContent
+#'
+#' WebkitLineClamp
+#'
+#' WebkitMask
+#'
+#' WebkitMaskClip
+#'
+#' WebkitMaskComposite
+#'
+#' WebkitMaskImage
+#'
+#' WebkitMaskOrigin
+#'
+#' WebkitMaskPosition
+#'
+#' WebkitMaskPositionX
+#'
+#' WebkitMaskPositionY
+#'
+#' WebkitMaskRepeat
+#'
+#' WebkitMaskSize
+#'
+#' WebkitOrder
+#'
+#' WebkitPerspective
+#'
+#' WebkitPerspectiveOrigin
+#'
+#' WebkitTextFillColor
+#'
+#' WebkitTextSizeAdjust
+#'
+#' WebkitTextStroke
+#'
+#' WebkitTextStrokeColor
+#'
+#' WebkitTextStrokeWidth
+#'
+#' WebkitTransform
+#'
+#' WebkitTransformOrigin
+#'
+#' WebkitTransformStyle
+#'
+#' WebkitTransition
+#'
+#' WebkitTransitionDelay
+#'
+#' WebkitTransitionDuration
+#'
+#' WebkitTransitionProperty
+#'
+#' WebkitTransitionTimingFunction
+#'
+#' WebkitUserSelect
+#'
+#' alignContent
+#'
+#' alignItems
+#'
+#' alignSelf
+#'
+#' all
+#'
+#' animation
+#'
+#' animationDelay
+#'
+#' animationDirection
+#'
+#' animationDuration
+#'
+#' animationFillMode
+#'
+#' animationIterationCount
+#'
+#' animationName
+#'
+#' animationPlayState
+#'
+#' animationTimingFunction
+#'
+#' appearance
+#'
+#' backfaceVisibility
+#'
+#' background
+#'
+#' backgroundAttachment
+#'
+#' backgroundBlendMode
+#'
+#' backgroundClip
+#'
+#' backgroundColor
+#'
+#' backgroundImage
+#'
+#' backgroundOrigin
+#'
+#' backgroundPosition
+#'
+#' backgroundPositionX
+#'
+#' backgroundPositionY
+#'
+#' backgroundRepeat
+#'
+#' backgroundSize
+#'
+#' blockSize
+#'
+#' border
+#'
+#' borderBlock
+#'
+#' borderBlockColor
+#'
+#' borderBlockEnd
+#'
+#' borderBlockEndColor
+#'
+#' borderBlockEndStyle
+#'
+#' borderBlockEndWidth
+#'
+#' borderBlockStart
+#'
+#' borderBlockStartColor
+#'
+#' borderBlockStartStyle
+#'
+#' borderBlockStartWidth
+#'
+#' borderBlockStyle
+#'
+#' borderBlockWidth
+#'
+#' borderBottom
+#'
+#' borderBottomColor
+#'
+#' borderBottomLeftRadius
+#'
+#' borderBottomRightRadius
+#'
+#' borderBottomStyle
+#'
+#' borderBottomWidth
+#'
+#' borderCollapse
+#'
+#' borderColor
+#'
+#' borderEndEndRadius
+#'
+#' borderEndStartRadius
+#'
+#' borderImage
+#'
+#' borderImageOutset
+#'
+#' borderImageRepeat
+#'
+#' borderImageSlice
+#'
+#' borderImageSource
+#'
+#' borderImageWidth
+#'
+#' borderInline
+#'
+#' borderInlineColor
+#'
+#' borderInlineEnd
+#'
+#' borderInlineEndColor
+#'
+#' borderInlineEndStyle
+#'
+#' borderInlineEndWidth
+#'
+#' borderInlineStart
+#'
+#' borderInlineStartColor
+#'
+#' borderInlineStartStyle
+#'
+#' borderInlineStartWidth
+#'
+#' borderInlineStyle
+#'
+#' borderInlineWidth
+#'
+#' borderLeft
+#'
+#' borderLeftColor
+#'
+#' borderLeftStyle
+#'
+#' borderLeftWidth
+#'
+#' borderRadius
+#'
+#' borderRight
+#'
+#' borderRightColor
+#'
+#' borderRightStyle
+#'
+#' borderRightWidth
+#'
+#' borderSpacing
+#'
+#' borderStartEndRadius
+#'
+#' borderStartStartRadius
+#'
+#' borderStyle
+#'
+#' borderTop
+#'
+#' borderTopColor
+#'
+#' borderTopLeftRadius
+#'
+#' borderTopRightRadius
+#'
+#' borderTopStyle
+#'
+#' borderTopWidth
+#'
+#' borderWidth
+#'
+#' bottom
+#'
+#' boxDecorationBreak
+#'
+#' boxShadow
+#'
+#' boxSizing
+#'
+#' breakAfter
+#'
+#' breakBefore
+#'
+#' breakInside
+#'
+#' captionSide
+#'
+#' caretColor
+#'
+#' clear
+#'
+#' clip
+#'
+#' clipPath
+#'
+#' clipRule
+#'
+#' color
+#'
+#' colorAdjust
+#'
+#' colorInterpolation
+#'
+#' colorInterpolationFilters
+#'
+#' columnCount
+#'
+#' columnFill
+#'
+#' columnGap
+#'
+#' columnRule
+#'
+#' columnRuleColor
+#'
+#' columnRuleStyle
+#'
+#' columnRuleWidth
+#'
+#' columnSpan
+#'
+#' columnWidth
+#'
+#' columns
+#'
+#' contain
+#'
+#' content
+#'
+#' counterIncrement
+#'
+#' counterReset
+#'
+#' counterSet
+#'
+#' cssFloat
+#'
+#' cssText
+#'
+#' cursor
+#'
+#' cx
+#'
+#' cy
+#'
+#' direction
+#'
+#' display
+#'
+#' dominantBaseline
+#'
+#' emptyCells
+#'
+#' fill
+#'
+#' fillOpacity
+#'
+#' fillRule
+#'
+#' filter
+#'
+#' flex
+#'
+#' flexBasis
+#'
+#' flexDirection
+#'
+#' flexFlow
+#'
+#' flexGrow
+#'
+#' flexShrink
+#'
+#' flexWrap
+#'
+#' float
+#'
+#' floodColor
+#'
+#' floodOpacity
+#'
+#' font
+#'
+#' fontFamily
+#'
+#' fontFeatureSettings
+#'
+#' fontKerning
+#'
+#' fontLanguageOverride
+#'
+#' fontOpticalSizing
+#'
+#' fontSize
+#'
+#' fontSizeAdjust
+#'
+#' fontStretch
+#'
+#' fontStyle
+#'
+#' fontSynthesis
+#'
+#' fontVariant
+#'
+#' fontVariantAlternates
+#'
+#' fontVariantCaps
+#'
+#' fontVariantEastAsian
+#'
+#' fontVariantLigatures
+#'
+#' fontVariantNumeric
+#'
+#' fontVariantPosition
+#'
+#' fontVariationSettings
+#'
+#' fontWeight
+#'
+#' gap
+#'
+#' grid
+#'
+#' gridArea
+#'
+#' gridAutoColumns
+#'
+#' gridAutoFlow
+#'
+#' gridAutoRows
+#'
+#' gridColumn
+#'
+#' gridColumnEnd
+#'
+#' gridColumnGap
+#'
+#' gridColumnStart
+#'
+#' gridGap
+#'
+#' gridRow
+#'
+#' gridRowEnd
+#'
+#' gridRowGap
+#'
+#' gridRowStart
+#'
+#' gridTemplate
+#'
+#' gridTemplateAreas
+#'
+#' gridTemplateColumns
+#'
+#' gridTemplateRows
+#'
+#' height
+#'
+#' hyphens
+#'
+#' imageOrientation
+#'
+#' imageRendering
+#'
+#' imeMode
+#'
+#' inlineSize
+#'
+#' inset
+#'
+#' insetBlock
+#'
+#' insetBlockEnd
+#'
+#' insetBlockStart
+#'
+#' insetInline
+#'
+#' insetInlineEnd
+#'
+#' insetInlineStart
+#'
+#' isolation
+#'
+#' justifyContent
+#'
+#' justifyItems
+#'
+#' justifySelf
+#'
+#' left
+#'
+#' length 0
+#'
+#' letterSpacing
+#'
+#' lightingColor
+#'
+#' lineBreak
+#'
+#' lineHeight
+#'
+#' listStyle
+#'
+#' listStyleImage
+#'
+#' listStylePosition
+#'
+#' listStyleType
+#'
+#' margin
+#'
+#' marginBlock
+#'
+#' marginBlockEnd
+#'
+#' marginBlockStart
+#'
+#' marginBottom
+#'
+#' marginInline
+#'
+#' marginInlineEnd
+#'
+#' marginInlineStart
+#'
+#' marginLeft
+#'
+#' marginRight
+#'
+#' marginTop
+#'
+#' marker
+#'
+#' markerEnd
+#'
+#' markerMid
+#'
+#' markerStart
+#'
+#' mask
+#'
+#' maskClip
+#'
+#' maskComposite
+#'
+#' maskImage
+#'
+#' maskMode
+#'
+#' maskOrigin
+#'
+#' maskPosition
+#'
+#' maskPositionX
+#'
+#' maskPositionY
+#'
+#' maskRepeat
+#'
+#' maskSize
+#'
+#' maskType
+#'
+#' maxBlockSize
+#'
+#' maxHeight
+#'
+#' maxInlineSize
+#'
+#' maxWidth
+#'
+#' minBlockSize
+#'
+#' minHeight
+#'
+#' minInlineSize
+#'
+#' minWidth
+#'
+#' mixBlendMode
+#'
+#' objectFit
+#'
+#' objectPosition
+#'
+#' offset
+#'
+#' offsetAnchor
+#'
+#' offsetDistance
+#'
+#' offsetPath
+#'
+#' offsetRotate
+#'
+#' opacity
+#'
+#' order
+#'
+#' outline
+#'
+#' outlineColor
+#'
+#' outlineOffset
+#'
+#' outlineStyle
+#'
+#' outlineWidth
+#'
+#' overflow
+#'
+#' overflowAnchor
+#'
+#' overflowBlock
+#'
+#' overflowInline
+#'
+#' overflowWrap
+#'
+#' overflowX
+#'
+#' overflowY
+#'
+#' overscrollBehavior
+#'
+#' overscrollBehaviorBlock
+#'
+#' overscrollBehaviorInline
+#'
+#' overscrollBehaviorX
+#'
+#' overscrollBehaviorY
+#'
+#' padding
+#'
+#' paddingBlock
+#'
+#' paddingBlockEnd
+#'
+#' paddingBlockStart
+#'
+#' paddingBottom
+#'
+#' paddingInline
+#'
+#' paddingInlineEnd
+#'
+#' paddingInlineStart
+#'
+#' paddingLeft
+#'
+#' paddingRight
+#'
+#' paddingTop
+#'
+#' pageBreakAfter
+#'
+#' pageBreakBefore
+#'
+#' pageBreakInside
+#'
+#' paintOrder
+#'
+#' parentRule null
+#'
+#' perspective
+#'
+#' perspectiveOrigin
+#'
+#' placeContent
+#'
+#' placeItems
+#'
+#' placeSelf
+#'
+#' pointerEvents
+#'
+#' position
+#'
+#' quotes
+#'
+#' r
+#'
+#' resize
+#'
+#' right
+#'
+#' rotate
+#'
+#' rowGap
+#'
+#' rubyAlign
+#'
+#' rubyPosition
+#'
+#' rx
+#'
+#' ry
+#'
+#' scale
+#'
+#' scrollBehavior
+#'
+#' scrollMargin
+#'
+#' scrollMarginBlock
+#'
+#' scrollMarginBlockEnd
+#'
+#' scrollMarginBlockStart
+#'
+#' scrollMarginBottom
+#'
+#' scrollMarginInline
+#'
+#' scrollMarginInlineEnd
+#'
+#' scrollMarginInlineStart
+#'
+#' scrollMarginLeft
+#'
+#' scrollMarginRight
+#'
+#' scrollMarginTop
+#'
+#' scrollPadding
+#'
+#' scrollPaddingBlock
+#'
+#' scrollPaddingBlockEnd
+#'
+#' scrollPaddingBlockStart
+#'
+#' scrollPaddingBottom
+#'
+#' scrollPaddingInline
+#'
+#' scrollPaddingInlineEnd
+#'
+#' scrollPaddingInlineStart
+#'
+#' scrollPaddingLeft
+#'
+#' scrollPaddingRight
+#'
+#' scrollPaddingTop
+#'
+#' scrollSnapAlign
+#'
+#' scrollSnapType
+#'
+#' scrollbarColor
+#'
+#' scrollbarWidth
+#'
+#' shapeImageThreshold
+#'
+#' shapeMargin
+#'
+#' shapeOutside
+#'
+#' shapeRendering
+#'
+#' stopColor
+#'
+#' stopOpacity
+#'
+#' stroke
+#'
+#' strokeDasharray
+#'
+#' strokeDashoffset
+#'
+#' strokeLinecap
+#'
+#' strokeLinejoin
+#'
+#' strokeMiterlimit
+#'
+#' strokeOpacity
+#'
+#' strokeWidth
+#'
+#' tableLayout
+#'
+#' textAlign
+#'
+#' textAlignLast
+#'
+#' textAnchor
+#'
+#' textCombineUpright
+#'
+#' textDecoration
+#'
+#' textDecorationColor
+#'
+#' textDecorationLine
+#'
+#' textDecorationSkipInk
+#'
+#' textDecorationStyle
+#'
+#' textDecorationThickness
+#'
+#' textEmphasis
+#'
+#' textEmphasisColor
+#'
+#' textEmphasisPosition
+#'
+#' textEmphasisStyle
+#'
+#' textIndent
+#'
+#' textJustify
+#'
+#' textOrientation
+#'
+#' textOverflow
+#'
+#' textRendering
+#'
+#' textShadow
+#'
+#' textTransform
+#'
+#' textUnderlineOffset
+#'
+#' textUnderlinePosition
+#'
+#' top
+#'
+#' touchAction
+#'
+#' transform
+#'
+#' transformBox
+#'
+#' transformOrigin
+#'
+#' transformStyle
+#'
+#' transition
+#'
+#' transitionDelay
+#'
+#' transitionDuration
+#'
+#' transitionProperty
+#'
+#' transitionTimingFunction
+#'
+#' translate
+#'
+#' unicodeBidi
+#'
+#' userSelect
+#'
+#' vectorEffect
+#'
+#' verticalAlign
+#'
+#' visibility
+#'
+#' webkitAlignContent
+#'
+#' webkitAlignItems
+#'
+#' webkitAlignSelf
+#'
+#' webkitAnimation
+#'
+#' webkitAnimationDelay
+#'
+#' webkitAnimationDirection
+#'
+#' webkitAnimationDuration
+#'
+#' webkitAnimationFillMode
+#'
+#' webkitAnimationIterationCount
+#'
+#' webkitAnimationName
+#'
+#' webkitAnimationPlayState
+#'
+#' webkitAnimationTimingFunction
+#'
+#' webkitAppearance
+#'
+#' webkitBackfaceVisibility
+#'
+#' webkitBackgroundClip
+#'
+#' webkitBackgroundOrigin
+#'
+#' webkitBackgroundSize
+#'
+#' webkitBorderBottomLeftRadius
+#'
+#' webkitBorderBottomRightRadius
+#'
+#' webkitBorderImage
+#'
+#' webkitBorderRadius
+#'
+#' webkitBorderTopLeftRadius
+#'
+#' webkitBorderTopRightRadius
+#'
+#' webkitBoxAlign
+#'
+#' webkitBoxDirection
+#'
+#' webkitBoxFlex
+#'
+#' webkitBoxOrdinalGroup
+#'
+#' webkitBoxOrient
+#'
+#' webkitBoxPack
+#'
+#' webkitBoxShadow
+#'
+#' webkitBoxSizing
+#'
+#' webkitFilter
+#'
+#' webkitFlex
+#'
+#' webkitFlexBasis
+#'
+#' webkitFlexDirection
+#'
+#' webkitFlexFlow
+#'
+#' webkitFlexGrow
+#'
+#' webkitFlexShrink
+#'
+#' webkitFlexWrap
+#'
+#' webkitJustifyContent
+#'
+#' webkitLineClamp
+#'
+#' webkitMask
+#'
+#' webkitMaskClip
+#'
+#' webkitMaskComposite
+#'
+#' webkitMaskImage
+#'
+#' webkitMaskOrigin
+#'
+#' webkitMaskPosition
+#'
+#' webkitMaskPositionX
+#'
+#' webkitMaskPositionY
+#'
+#' webkitMaskRepeat
+#'
+#' webkitMaskSize
+#'
+#' webkitOrder
+#'
+#' webkitPerspective
+#'
+#' webkitPerspectiveOrigin
+#'
+#' webkitTextFillColor
+#'
+#' webkitTextSizeAdjust
+#'
+#' webkitTextStroke
+#'
+#' webkitTextStrokeColor
+#'
+#' webkitTextStrokeWidth
+#'
+#' webkitTransform
+#'
+#' webkitTransformOrigin
+#'
+#' webkitTransformStyle
+#'
+#' webkitTransition
+#'
+#' webkitTransitionDelay
+#'
+#' webkitTransitionDuration
+#'
+#' webkitTransitionProperty
+#'
+#' webkitTransitionTimingFunction
+#'
+#' webkitUserSelect
+#'
+#' whiteSpace
+#'
+#' width
+#'
+#' willChange
+#'
+#' wordBreak
+#'
+#' wordSpacing
+#'
+#' wordWrap
+#'
+#' writingMode
+#'
+#' x
+#'
+#' y
+style_modify <- function(element_id, property="backgroundColor", value = "red", verbose = FALSE){
+  js_code=paste0('document.getElementById("',element_id,'").style.',property,' = "',value,'";')
+  if (verbose) message("Running JS code:\n", js_code)
+  shinyjs::runjs(js_code)
+}
+

@@ -18,7 +18,8 @@ Imports:
     shinyBS (>= 0.61),
     assertthat,
     data.table (>= 1.13.4),
-    magrittr
+    magrittr,
+    shinyjs (>= 2.0.0)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

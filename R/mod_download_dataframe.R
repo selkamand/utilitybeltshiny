@@ -16,7 +16,6 @@ mod_download_dataframe_ui <- function(id, label = "Download", tooltip_text ="", 
     )
 }
 
-
 #' Download Dataframe
 #'
 #' Downloads a dataframe or datatable.

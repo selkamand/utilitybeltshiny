@@ -11,7 +11,11 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       h1("utilitybeltshiny"),
-      mod_download_dataframe_ui(id = "mod_download_dataframe_test")
+      shinyjs::useShinyjs(),
+      mod_download_dataframe_ui(id = "mod_download_dataframe_test"),
+      br(),
+      br(),
+      shinyBS::bsButton(inputId = "input_change_background_to_red", label = div("Change Background To Red", span(style = "color: red; font-size: 20px", icon(name = "times"))), style = "primary")
     )
   )
 }
