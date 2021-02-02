@@ -8,7 +8,7 @@
 assert_reactive <- function(object, msg = "")
 {
   name_of_calling_function=utilitybelt::get_calling_function()
-  utilitybelt::assert_that(shiny::is.reactive(object), msg = fmterror("[",name_of_calling_function,"] assert_reactive: The object [",
+  utilitybelt::assert_that(shiny::is.reactive(object), msg = utilitybelt::fmterror("[",name_of_calling_function,"] assert_reactive: The object [",
                                                             substitute(object), "] must be a reactive, not a ", class(object),
                                                             ". Check you didn't accidentally add parenthesis when passing the argument ", msg))
 }
@@ -24,6 +24,6 @@ assert_reactive <- function(object, msg = "")
 assert_non_reactive <- function(object, msg = "")
 {
   name_of_calling_function=utilitybelt::get_calling_function()
-  utilitybelt::assert_that(!shiny::is.reactive(object), msg = fmterror("[",name_of_calling_function,"] assert_reactive: The object [",
+  utilitybelt::assert_that(!shiny::is.reactive(object), msg = utilitybelt::fmterror("[",name_of_calling_function,"] assert_reactive: The object [",
                                                                       substitute(object), "] must NOT be a reactive, not a ", class(object), msg))
 }
