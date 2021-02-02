@@ -28,3 +28,5 @@ BugReports: https://github.com/selkamand/utilitybeltshiny/issues
 Suggests: 
     covr,
     testthat
+Remotes:  
+    Thinkr-open/golem
