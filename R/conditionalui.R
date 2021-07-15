@@ -25,7 +25,7 @@
 #' }
 #'
 conditionalUI <- function(expression, ui_element){
-  utilitybelt::assert_that(is.logical(expression), msg="expression needs to be logical")
+  utilitybeltassertions::assert_that(is.logical(expression), msg="expression needs to be logical")
   if(expression)
     return(shiny::tagList(ui_element))
   else

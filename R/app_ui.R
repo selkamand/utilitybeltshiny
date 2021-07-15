@@ -11,7 +11,6 @@ app_ui <- function(request) {
     # Your application UI logic
     fluidPage(
       h1("utilitybeltshiny"),
-      shinyjs::useShinyjs(),
       mod_download_dataframe_ui(id = "mod_download_dataframe_test"),
       br(),
       br(),

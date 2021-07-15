@@ -32,13 +32,13 @@ mod_download_dataframe_server <- function(id, data_to_write, filename_full, rown
   moduleServer(id,
     function(input, output, session){
 
-      utilitybelt::assert_that(assertthat::is.flag(rownames))
-      utilitybelt::assert_that(assertthat::is.flag(colnames))
-      utilitybelt::assert_non_empty_string(filename_full)
+      utilitybeltassertions::assert_that(assertthat::is.flag(rownames))
+      utilitybeltassertions::assert_that(assertthat::is.flag(colnames))
+      utilitybeltassertions::assert_non_empty_string(filename_full)
       utilitybeltshiny::assert_reactive(data_to_write)
 
       output$out_download_bttn <- downloadHandler(filename = filename_full, content = function(file) {
-        utilitybelt::assert_that(is.data.frame(data_to_write()) || data.table::is.data.table(data_to_write()), msg = utilitybelt::fmterror("mod_download_dataframe_server: data_to_write() must be a dataframe or a datatable, not a ", class(data_to_write())))
+        utilitybeltassertions::assert_that(is.data.frame(data_to_write()), msg = utilitybeltassertions::fmterror("mod_download_dataframe_server: data_to_write() must be a dataframe or a datatable, not a ", class(data_to_write())))
         utils::write.table(x=data_to_write(), file = file, append = FALSE, quote = TRUE, sep = "\t", row.names = rownames, col.names = colnames)
         })
   }
